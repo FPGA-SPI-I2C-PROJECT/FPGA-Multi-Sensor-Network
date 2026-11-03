@@ -1,0 +1,24 @@
+# Vivado Generated Files & Directories
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.srcs/utils_1/
+*.gen/
+
+# Project File (If you manage project via Tcl script, uncomment next line)
+# *.xpr
+
+# Vivado Log & Journal Files
+*.log
+*.jou
+*.str
+*.mif
+*.wdb
+*.pb
+*.xil/
+
+# OS Specific Files
+.DS_Store
+Thumbs.db
