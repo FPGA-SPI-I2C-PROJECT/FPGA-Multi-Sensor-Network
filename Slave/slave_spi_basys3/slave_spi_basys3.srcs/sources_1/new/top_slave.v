@@ -36,54 +36,84 @@ module top_slave(
     input spi_sclk, //외부 클록 수신
     input spi_mosi, //데이터 수신
     input spi_cs,   //활성화 신호 수신
-    output reg spi_miso //데이터 송신
+    output reg spi_miso, //데이터 송신
+
+    output test_uart_rx, test_uart_tx
 
     );
 
-    wire [7:0] w_humidity;
-    wire [15:0] w_temperature;
-    wire [8:0] w_distance;
-    wire w_rx_done;
-    wire [7:0] w_rx_data;
+    reg [7:0] r_temp;
+    reg [7:0] r_humi;
+    reg [8:0] r_dist;
 
-    // DHT11_controller u_DHT11_controller(
-    //     .clk(clk),
-    //     .reset(reset),
-    //     .dht11_data(dht11_data),
-    //     .humidity(w_humidity),
-    //     .temperature(w_temperature)
-    // );
 
-    Ultrasonic_controller u_Ultrasonic_controller(
+    wire [7:0] w_dht_temp, w_dht_humi;
+    wire       w_dht_done;
+    wire       w_dht11_err;
+
+    wire [8:0] w_ultra_dist;
+    wire       w_ultra_done;
+
+    wire [7:0] w_out_dht_temp, w_out_dht_humi;
+    wire [8:0] w_out_ultra_dist;
+
+    wire w_dht_start, w_ultra_start;
+
+    
+    sensor_trigger_generator u_trigger_genergenerator (
         .clk(clk),
         .reset(reset),
-        .echo(echo),
+        .ultra_start_tick(w_ultra_start),
+        .dht_start_tick(w_dht_start)
+    );
+
+    dht11_sensor u_dht11_sensor(
+        .clk(clk),
+        .reset(reset),
+        .start(w_dht_start),      
+        .dht11_data(dht11_data), 
+        .humidity(w_dht_humi),   
+        .temperature(w_dht_temp),
+        .done(w_dht_done),       
+        .err(w_dht11_err)         
+    );
+
+    ultrasonic_sensor u_ultrasonic_sensor(
+        .clk(clk),
+        .reset(reset),
+        .start_trig(w_ultra_start),
         .trig(trig),
-        .distance(w_distance)
+        .echo(echo),
+        .distance(w_ultra_dist),
+        .done(w_ultra_done)
     );
 
-    Control_Unit u_Control_Unit(
+    sensor_reg_bank u_reg_bank (
+        .clk(clk), .reset(reset),
+        .dht_done(w_dht_done),
+        .dht_temp(w_dht_temp),
+        .dht_humi(w_dht_humi),
+        .ultra_done(w_ultra_done),
+        .ultra_dist(w_ultra_dist),
+
+        .reg_temp(w_out_dht_temp),
+        .reg_humi(w_out_dht_humi),
+        .reg_dist(w_out_ultra_dist)
+    );
+
+
+    uart_controller u_uart_controller(
         .clk(clk),
         .reset(reset),
-        .humidity(w_humidity),
-        .temperature(w_temperature),
-        .distance(w_distance),
-        .rx_done(w_rx_done),
-        .rx_data(w_rx_data),
-        .led(led),
-        .tx_busy(),
-        .tx_data(),
-        .tx_req()
-    ); 
+        .rx(RsRx),
+        .reg_temp(w_out_dht_temp),
+        .reg_humi(w_out_dht_humi),
+        .reg_dist(w_out_ultra_dist),
+        .tx(RsTx)
+    );
 
-    // Uart_controller u_Uart_controller(
-    //     .clk(clk),
-    //     .reset(reset),
-    //     .rx(RsRx),
-    //     .tx(RsTx),
-    //     .rx_done(w_rx_done),
-    //     .rx_data(w_rx_data)
-    // );
+    assign test_uart_rx = RsRx;
+    assign test_uart_tx = RsTx;
 
     // Spi_slave_controller u_Spi_slave_controller(
     //     .clk(clk),
