@@ -25,6 +25,7 @@ module sensor_network_master #(
     inout wire board_sda, board_scl,
     inout wire oled_sda, oled_scl,
     output wire RsTx,  // Master -> PC
+    output wire rx_debug, tx_debug,
     output wire [15:0] led
 );
     (* ASYNC_REG = "TRUE" *) reg [3:0] reset_pipe = 4'b1111;
@@ -52,7 +53,7 @@ module sensor_network_master #(
 
     uart_controller_master #(
     .BPS(9600)
-    ) u_uart_controller (
+    ) u_uart_controller_master (
         .clk(clk),
         .reset(reset),
 
@@ -101,4 +102,8 @@ module sensor_network_master #(
     assign led = {oled_ready,oled_error,oled_nack,oled_timeout,request_busy,
                   (SPI_PROTOCOL_READY == 0),(error_code == 4),(error_code == 1),
                   (error_code == 2),valid_mask,(error_code == 5),(error_code == 6),2'b0};
+
+    assign rx_debug = RsRx;
+    assign tx_debug = RsTx;
+    
 endmodule
