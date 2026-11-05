@@ -19,10 +19,12 @@ module sensor_network_master #(
 )(
     input wire clk, btnC,
     input wire [15:0] sw,
+    input wire RsRx,  // PC -> Master
     input wire spi_miso,
     output wire spi_sclk, spi_mosi, spi_cs_n,
     inout wire board_sda, board_scl,
     inout wire oled_sda, oled_scl,
+    output wire RsTx,  // Master -> PC
     output wire [15:0] led
 );
     (* ASYNC_REG = "TRUE" *) reg [3:0] reset_pipe = 4'b1111;
@@ -40,9 +42,32 @@ module sensor_network_master #(
     wire [8:0] distance;
     wire [2:0] valid_mask, error_code;
     wire oled_ready, oled_error, oled_nack, oled_timeout;
+    wire [2:0] uart_request_mask;
+    wire [1:0] uart_request_mode;
+    wire uart_reply_overflow;
+
     request_button #(.STABLE_CYCLES(BUTTON_CYCLES)) button (
         .clk(clk),.reset(reset),.button(btnC),.pressed(request)
     );
+
+    uart_controller_master #(
+    .BPS(9600)
+    ) u_uart_controller (
+        .clk(clk),
+        .reset(reset),
+
+        .rx(RsRx),
+        .tx(RsTx),
+
+        .mode_in(sw_sync[1:0]),
+        .master_busy(request_busy),
+
+        .request(request),
+        .request_mask(uart_request_mask),
+        .request_mode(uart_request_mode),
+        .reply_overflow(uart_reply_overflow)
+    );
+
     sensor_request_master #(.CLK_HZ(CLK_HZ),.SPI_HZ(SPI_HZ),
         .BOARD_I2C_HZ(BOARD_I2C_HZ),.TIMEOUT_MS(TIMEOUT_MS),.SLAVE_ADDR(SLAVE_ADDR),
         .SPI_PROTOCOL_READY(SPI_PROTOCOL_READY),
