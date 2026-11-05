@@ -2,6 +2,7 @@
 // New top; top_master.v remains available as the original OLED abc demo.
 module sensor_network_master #(
     parameter CLK_HZ = 100_000_000,
+    parameter UART_BPS = 9600,
     parameter SPI_HZ = 100_000,
     parameter I2C_HZ = 100_000,
     parameter BOARD_I2C_HZ = 100_000,
@@ -39,6 +40,10 @@ module sensor_network_master #(
         else begin sw_meta <= sw[4:0]; sw_sync <= sw_meta; end
     end
     wire request, request_busy, display_update;
+    wire button_request, uart_request;
+    wire button_grant, uart_blocked;
+    wire [2:0] selected_request_mask;
+    wire [1:0] selected_request_mode;
     wire [7:0] temperature, humidity;
     wire [8:0] distance;
     wire [2:0] valid_mask, error_code;
@@ -47,12 +52,22 @@ module sensor_network_master #(
     wire [1:0] uart_request_mode;
     wire uart_reply_overflow;
 
+    // Each source drives its own wire. Only this mux drives acquisition.
+    // Simultaneous request pulses: UART wins, button pulse is discarded.
+    assign button_grant = !request_busy && button_request && !uart_request;
+    // Reserve the acquisition edge for an already granted button request.
+    // The unchanged UART controller then returns ERR BUSY instead of OK.
+    assign uart_blocked = request_busy || button_grant;
+    assign request = !request_busy && (uart_request || button_request);
+    assign selected_request_mask = uart_request ? uart_request_mask : sw_sync[4:2];
+    assign selected_request_mode = uart_request ? uart_request_mode : sw_sync[1:0];
+
     request_button #(.STABLE_CYCLES(BUTTON_CYCLES)) button (
-        .clk(clk),.reset(reset),.button(btnC),.pressed(request)
+        .clk(clk),.reset(reset),.button(btnC),.pressed(button_request)
     );
 
     uart_controller_master #(
-    .BPS(9600)
+    .BPS(UART_BPS)
     ) u_uart_controller_master (
         .clk(clk),
         .reset(reset),
@@ -61,9 +76,9 @@ module sensor_network_master #(
         .tx(RsTx),
 
         .mode_in(sw_sync[1:0]),
-        .master_busy(request_busy),
+        .master_busy(uart_blocked),
 
-        .request(request),
+        .request(uart_request),
         .request_mask(uart_request_mask),
         .request_mode(uart_request_mode),
         .reply_overflow(uart_reply_overflow)
@@ -76,8 +91,8 @@ module sensor_network_master #(
         .clk(clk),
         .reset(reset),
         .request(request),
-        .mode(sw_sync[1:0]),
-        .request_mask(sw_sync[4:2]),
+        .mode(selected_request_mode),
+        .request_mask(selected_request_mask),
         .spi_miso(spi_miso),
         .board_sda(board_sda),
         .board_scl(board_scl),
