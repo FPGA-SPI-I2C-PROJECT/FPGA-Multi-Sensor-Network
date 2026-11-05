@@ -19,7 +19,6 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module ultrasonic_sensor (
     input clk,
     input reset,
@@ -38,66 +37,86 @@ module ultrasonic_sensor (
 
     reg [1:0] state;
     wire tick;
-    reg [14:0] tick_cnt;
+    reg [15:0] tick_cnt;
 
     tick_generator #(
         .TICK_FREQ_HZ(1_000_000)
-    ) U_tick_1Hz(
+    ) U_tick_1us (
         .clk(clk),
         .reset(reset),
         .tick(tick)
     );
 
+
+
+    reg [2:0] echo_sync;
+    always @(posedge clk or posedge reset) begin
+        if (reset) echo_sync <= 3'b0;
+        else       echo_sync <= {echo_sync[1:0], echo};
+    end
+
+    wire echo_posedge = (echo_sync[2:1] == 2'b01);
+    wire echo_negedge = (echo_sync[2:1] == 2'b10);
+    // wire echo_level   = echo_sync[1];
+
+    // FSM: 상태 전환은 100MHz로 즉각 감지하되, 카운터 누적은 1us tick 기준으로 수행
     always @(posedge clk or posedge reset) begin
         if (reset) begin
-            state <= IDLE;
-            trig <= 0;
-            distance <= 14'b0;
-            tick_cnt <= 0;
-            done <= 1'b0;
-        end else if (tick) begin
+            state    <= IDLE;
+            trig     <= 1'b0;
+            distance <= 9'd0;
+            tick_cnt <= 15'd0;
+            done     <= 1'b0;
+        end else begin
             done <= 1'b0;
             case (state)
                 IDLE: begin
+                    trig     <= 1'b0;
                     if (start_trig) begin
-                        trig <= 1;
-                        tick_cnt <= 0;
-                        state <= START_SIGNAL;
+                        trig     <= 1'b1;
+                        tick_cnt <= 15'd0;
+                        state    <= START_SIGNAL;
                     end
                 end
 
                 START_SIGNAL: begin
-                    if (tick_cnt == 10) begin
-                        trig <= 0;
-                        tick_cnt <= 0;
-                        state <= WAIT_HIGH;
-                    end else begin
-                        tick_cnt <= tick_cnt + 1;
+                    if (tick) begin
+                        if (tick_cnt >= 15'd10) begin // 10us 경과
+                            trig     <= 1'b0;
+                            tick_cnt <= 15'd0;
+                            state    <= WAIT_HIGH;
+                        end else begin
+                            tick_cnt <= tick_cnt + 1'b1;
+                        end
                     end
                 end
 
                 WAIT_HIGH: begin
-                    if (echo) begin
-                        tick_cnt <= 0;
-                        state <= READ_DATA;
-                    end else if (tick_cnt > 10_000) begin
-                        state <= IDLE;
-                        done  <= 1'b1;
-                    end else begin
-                        tick_cnt <= tick_cnt + 1;
+                    if (echo_posedge) begin
+                        tick_cnt <= 15'd0;
+                        state    <= READ_DATA;
+                    end else if (tick) begin
+                        if (tick_cnt > 16'd60_000) begin // 타임아웃 보호
+                            state <= IDLE;
+                            done  <= 1'b1;
+                        end else begin
+                            tick_cnt <= tick_cnt + 1'b1;
+                        end
                     end
                 end
 
                 READ_DATA: begin
-                    if (!echo) begin
-                        distance <= tick_cnt / 58; //
-                        state <= IDLE;
+                    if (echo_negedge) begin
+                        distance <= tick_cnt / 58;
+                        state    <= IDLE;
                         done     <= 1'b1;
-                    end else if (tick_cnt > 10_000) begin
-                        state <= IDLE;
-                        done     <= 1'b1;
-                    end else begin
-                        tick_cnt <= tick_cnt + 1;
+                    end else if (tick) begin
+                        if (tick_cnt > 15'd60_000) begin // 타임아웃 보호
+                            state <= IDLE;
+                            done  <= 1'b1;
+                        end else begin
+                            tick_cnt <= tick_cnt + 1'b1;
+                        end
                     end
                 end
 
