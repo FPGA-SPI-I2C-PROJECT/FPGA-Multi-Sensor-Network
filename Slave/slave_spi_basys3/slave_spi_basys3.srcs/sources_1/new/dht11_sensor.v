@@ -9,6 +9,8 @@ module dht11_sensor (
 
     output reg  [7:0]  humidity,   // 습도 정수부
     output reg  [7:0]  temperature,// 온도 정수부
+    output reg [7:0] humidity_dec,    // 습도 소수부
+    output reg [7:0] temperature_dec, // 온도 소수부
     output reg         done,       // 측정 완료 펄스 (1클록)
     output reg         err         // 체크섬 오류 또는 타임아웃
 );
@@ -69,6 +71,7 @@ module dht11_sensor (
         else       dht_in_d <= dht_in;
     end
     wire dht_posedge = (~dht_in_d &&  dht_in); // 0 -> 1 상승 에지
+    wire dht_negedge = ( dht_in_d && ~dht_in); // 1 -> 0 하강 에지
 
     // 수신 데이터 및 비트 카운터
     reg [39:0] rx_shift;
@@ -86,6 +89,8 @@ module dht11_sensor (
             high_cnt_us <= 0;
             humidity    <= 0;
             temperature <= 0;
+            humidity_dec    <= 8'd0;
+            temperature_dec <= 8'd0;
             done        <= 0;
             err         <= 0;
         end else begin
@@ -151,9 +156,14 @@ module dht11_sensor (
                 // 센서의 High 응답 대기 (Low가 끝나고 High로 올라가는 시점)
                 S_RESP_HIGH: begin
                     // 센서의 High(80us)가 끝나고 첫 데이터 비트의 Low(1'b0)로 떨어지는 순간 전이
-                    if (dht_posedge) begin
+                    if (dht_negedge) begin
                         us_cnt   <= 20'd0;
+
+                        bit_idx     <= 6'd0;
+                        high_cnt_us <= 16'd0;
                         state    <= S_BIT_LOW; // 첫 비트의 50us Low 감지 상태로 진입
+
+
                     end else if (us_tick) begin
                         if (us_cnt >= 20'd150) begin // 80us High 타임아웃 보호 (넉넉히 150us)
                             err   <= 1'b1;
@@ -185,6 +195,8 @@ module dht11_sensor (
                     if (dht_in == 1'b0) begin // High 종료 시점
                         // 40us보다 길면 1, 짧으면 0
                         rx_shift <= {rx_shift[38:0], (high_cnt_us > 16'd40) ? 1'b1 : 1'b0};
+
+                        high_cnt_us <= 16'd0; // 수정
                         
                         if (bit_idx == 6'd39) begin
                             state <= S_CHECK;
@@ -204,15 +216,17 @@ module dht11_sensor (
                 // 체크섬 검증: [39:32] + [31:24] + [23:16] + [15:8] == [7:0]
                 S_CHECK: begin
                     if ((rx_shift[39:32] + rx_shift[31:24] + rx_shift[23:16] + rx_shift[15:8]) == rx_shift[7:0]) begin
-                        humidity    <= rx_shift[39:32];
-                        temperature <= rx_shift[23:16];
-                        done        <= 1'b1;
+                        humidity        <= rx_shift[39:32]; // 습도 정수
+                        humidity_dec    <= rx_shift[31:24]; // 습도 소수
+                        temperature     <= rx_shift[23:16]; // 온도 정수
+                        temperature_dec <= rx_shift[15:8];  // 온도 소수
+                        done            <= 1'b1;
                     end else begin
-                        err <= 1'b1; // 체크섬 불일치
+                        err <= 1'b1;
                     end
                     state <= S_IDLE;
                 end
-
+                
                 default: state <= S_IDLE;
             endcase
         end
