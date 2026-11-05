@@ -2,28 +2,28 @@
 // START, address+W, register, repeated START, address+R, MSB, ACK, LSB,
 // NACK, STOP. One open-drain driver per pin; supports clock stretching.
 module i2c_sensor_read_master #(
-    parameter integer CLK_HZ = 100_000_000,
-    parameter integer I2C_HZ = 100_000,
-    parameter integer TIMEOUT_MS = 250,
+    parameter CLK_HZ = 100_000_000,
+    parameter I2C_HZ = 100_000,
+    parameter TIMEOUT_MS = 250,
     parameter [6:0] SLAVE_ADDR = 7'h42
 )(
-    input wire clk, reset, start,
-    input wire [7:0] command,
-    inout wire sda, scl,
+    input clk, reset, start,
+    input [7:0] command,
+    inout sda, scl,
     output reg busy, done, nack, timeout_error,
     output reg [15:0] response
 );
     localparam integer Q = (CLK_HZ+4*I2C_HZ-1)/(4*I2C_HZ);
     localparam integer LIMIT = (CLK_HZ/1000)*TIMEOUT_MS;
-    localparam IDLE=0, BUS_FREE=1, START_HOLD=2, START_LOW=3,
-        TX_SET=4, TX_RISE=5, TX_HIGH=6, TX_FALL=7,
-        ACK_SET=8, ACK_RISE=9, ACK_HIGH=10, ACK_FALL=11, NEXT_TX=12,
-        RESTART_LOW=13, RESTART_RISE=14, RESTART_HIGH=15,
-        RX_SET=16, RX_RISE=17, RX_HIGH=18, RX_FALL=19,
-        MASTER_ACK_SET=20, MASTER_ACK_RISE=21, MASTER_ACK_HIGH=22,
-        MASTER_ACK_FALL=23, STOP_SET=24, STOP_RISE=25, STOP_HIGH=26,
-        STOP_RELEASE=27, STOP_FREE=28, REC_LOW=29, REC_RISE=30,
-        REC_HIGH=31, REC_FALL=32;
+    localparam  IDLE=0, BUS_FREE=1, START_HOLD=2, START_LOW=3,
+                TX_SET=4, TX_RISE=5, TX_HIGH=6, TX_FALL=7,
+                ACK_SET=8, ACK_RISE=9, ACK_HIGH=10, ACK_FALL=11, NEXT_TX=12,
+                RESTART_LOW=13, RESTART_RISE=14, RESTART_HIGH=15,
+                RX_SET=16, RX_RISE=17, RX_HIGH=18, RX_FALL=19,
+                MASTER_ACK_SET=20, MASTER_ACK_RISE=21, MASTER_ACK_HIGH=22,
+                MASTER_ACK_FALL=23, STOP_SET=24, STOP_RISE=25, STOP_HIGH=26,
+                STOP_RELEASE=27, STOP_FREE=28, REC_LOW=29, REC_RISE=30,
+                REC_HIGH=31, REC_FALL=32;
     reg [5:0] state;
     reg [31:0] divider, watchdog;
     reg sda_low, scl_low;
@@ -42,8 +42,10 @@ module i2c_sensor_read_master #(
     end
     always @(posedge clk) begin
         if (reset) begin
-            state <= IDLE; divider <= 0; watchdog <= 0;
-            sda_low <= 0; scl_low <= 0; busy <= 0; done <= 0;
+            state <= IDLE;
+            divider <= 0; watchdog <= 0;
+            sda_low <= 0; scl_low <= 0;
+            busy <= 0; done <= 0;
             nack <= 0; timeout_error <= 0; response <= 0;
             tx_shift <= 0; register_select <= 0; tx_bit <= 7; tx_stage <= 0;
             rx_shift <= 0; rx_bit <= 15; recovery_count <= 0;
@@ -54,28 +56,45 @@ module i2c_sensor_read_master #(
                 divider <= 0; watchdog <= 0;
                 if (start) begin
                     busy <= 1; nack <= 0; timeout_error <= 0; response <= 0;
-                    register_select <= command; tx_shift <= {SLAVE_ADDR,1'b0};
-                    tx_stage <= 0; tx_bit <= 7; rx_bit <= 15; rx_shift <= 0;
-                    recovering <= 0; recovery_attempted <= 0; state <= BUS_FREE;
+                    register_select <= command;
+                    tx_shift <= {SLAVE_ADDR,1'b0};
+                    tx_stage <= 0; tx_bit <= 7;
+                    rx_bit <= 15; rx_shift <= 0;
+                    recovering <= 0; recovery_attempted <= 0;
+                    state <= BUS_FREE;
                 end
             end else if (watchdog >= LIMIT-1) begin
-                sda_low <= 0; scl_low <= 0; busy <= 0; done <= 1;
-                timeout_error <= 1; response <= 0; state <= IDLE;
+                sda_low <= 0; scl_low <= 0;
+                busy <= 0; done <= 1;
+                timeout_error <= 1;
+                response <= 0;
+                state <= IDLE;
             end else begin
                 watchdog <= watchdog+1;
                 if (divider == Q-1) begin
                     divider <= 0;
                     case (state)
                         BUS_FREE: if (scl_sync[1]) begin
-                            if (sda_sync[1]) begin sda_low <= 1; state <= START_HOLD; end
+                            if (sda_sync[1]) begin
+                                sda_low <= 1;
+                                state <= START_HOLD;
+                                end
                             else if (!recovery_attempted) begin
                                 recovering <= 1; recovery_attempted <= 1;
-                                recovery_count <= 0; scl_low <= 1; state <= REC_LOW;
+                                recovery_count <= 0;
+                                scl_low <= 1;
+                                state <= REC_LOW;
                             end
                         end
-                        START_HOLD: begin scl_low <= 1; state <= START_LOW; end
+                        START_HOLD: begin
+                            scl_low <= 1;
+                            state <= START_LOW;
+                        end
                         START_LOW: state <= TX_SET;
-                        TX_SET: begin sda_low <= !tx_shift[tx_bit]; state <= TX_RISE; end
+                        TX_SET: begin
+                            sda_low <= !tx_shift[tx_bit];
+                            state <= TX_RISE;
+                            end
                         TX_RISE: begin scl_low <= 0; state <= TX_HIGH; end
                         TX_HIGH: if (scl_sync[1]) state <= TX_FALL;
                         TX_FALL: begin

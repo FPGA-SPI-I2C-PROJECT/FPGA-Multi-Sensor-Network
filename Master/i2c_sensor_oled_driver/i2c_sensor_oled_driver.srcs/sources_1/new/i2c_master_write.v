@@ -86,14 +86,14 @@ module i2c_write_master #(
                             sda_low <= 1; state <= START_HOLD;                          // start 신호가 오면 1/4 SCL_PERIOD(=2.5 us) 뒤에 SDA를 Low로.
                         end
                         START_HOLD: begin scl_low <= 1; state <= START_LOW; end         // SDA가 Low가 되고 1/4 SCL_PERIOD 뒤에 SCL도 Low로 만들어 I2C 통신 start.
-                        START_LOW: state <= BIT_SET;                                    // 2/4 SCL_PERIOD: state를 BIT_SET으로 전환
+                        START_LOW: state <= BIT_SET;                                    // 1/4 SCL_PERIOD: state를 BIT_SET으로 전환
                         BIT_SET: begin
-                            // 3/4 SCLPERIOD: slave address를 보내기 시작. shift reg의 MSB부터 보낸다. sda_low는 HIGH일 때 SDA를 LOW로 만드므로, shift[bit_index]의 값과 반전된 값을 넣어야한다. ex) shift[7] = 1 => sda_low = 0
+                            // 2/4 SCLPERIOD: slave address를 보내기 시작. shift reg의 MSB부터 보낸다. sda_low는 HIGH일 때 SDA를 LOW로 만드므로, shift[bit_index]의 값과 반전된 값을 넣어야한다. ex) shift[7] = 1 => sda_low = 0
                             // 7/4 SCL_PERIOD: bit_index = 6. shift[6]에 따라서 SDA 값을 정하고 state <= RISE로 이동.
                             sda_low <= !shift[bit_index]; state <= BIT_RISE;
                         end
                         BIT_RISE: begin
-                            scl_low <= 0; state <= BIT_HIGH; end                        // 4/4 SCL_PERIOD: SCL의값을 반전시켜야함. (LOW -> HIGH) 아직까지 SDA에는 shift[7] 값을 나타낸다.
+                            scl_low <= 0; state <= BIT_HIGH; end                        // 3/4 SCL_PERIOD: SCL의값을 반전시켜야함. (LOW -> HIGH) 아직까지 SDA에는 shift[7] 값을 나타낸다. 첫 번째 데이터를 보낼 때만 3/4 SCL_PERIOD에서 SCL이 반전되고 이후로는 2/4, 4/4 SCL_PERIOD에서 SCL이 반전된다.
                         BIT_HIGH: if (scl_sync[1]) state <= BIT_FALL;                   // 5/4 SCL_PERIOD: scl_sync[1] =1 --> 이전에 scl = 1 --> state를 BIT_FALL로
                         BIT_FALL: begin                                                 // 6/4 SCL_PERIOD: 여기서 SDA에 다른 데이터를 보낼 준비를 해야함.
                             scl_low <= 1;                                               // scl_low <= 1 --> SCL을 HIGH -> LOW.
