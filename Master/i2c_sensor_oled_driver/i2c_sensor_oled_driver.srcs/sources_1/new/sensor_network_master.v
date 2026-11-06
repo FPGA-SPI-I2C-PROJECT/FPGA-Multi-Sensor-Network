@@ -5,7 +5,7 @@ module sensor_network_master #(
     parameter UART_BPS = 9600,
     parameter SPI_HZ = 100_000,
     parameter I2C_HZ = 100_000,
-    parameter BOARD_I2C_HZ = 100_000,
+    parameter BOARD_I2C_HZ = 1_000_000,
     parameter [6:0] SLAVE_ADDR = 7'h42,
     parameter OLED_HEIGHT = 32,
     parameter [6:0] OLED_ADDR = 7'h3C,

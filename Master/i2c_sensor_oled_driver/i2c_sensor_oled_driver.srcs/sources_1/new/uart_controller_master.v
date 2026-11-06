@@ -23,6 +23,7 @@ module uart_controller_master #(
     reg [7:0] tx_data;
     reg tx_start;
 
+    // Rx Syncronization
     always @(posedge clk or posedge reset)
         if (reset) rx_sync <= 2'b11;
         else rx_sync <= {rx_sync[0], rx};
@@ -41,10 +42,9 @@ module uart_controller_master #(
     reg [2:0] length;              // saturates at 4: too long
     reg last_cr;
 
-    wire line_end = rx_done &&
-        ((rx_data == CR) || ((rx_data == LF) && !last_cr));
+    wire line_end = rx_done && ((rx_data == CR) || ((rx_data == LF) && !last_cr));  // rx_done이 1이 되고, 마지막 rx_data가 CR이거나 rx_data가 CR은 아니어도 LF이면 문자열을 line을 모두 보냇다, 
 
-    function [2:0] decode_mask;
+    function [2:0] decode_mask; // 원하는 데이터를 요청하는 mask 생성
         input [2:0] n;
         input [7:0] a, b, c;
         begin

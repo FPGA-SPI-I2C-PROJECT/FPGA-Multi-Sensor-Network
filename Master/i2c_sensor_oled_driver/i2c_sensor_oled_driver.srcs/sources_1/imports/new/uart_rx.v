@@ -16,8 +16,14 @@ module uart_rx # (
     localparam S_STOP_BIT = 2'b11;
 
     // 9600 * 16 = 153,600
-    // 100_000_000 Hz / 153,600 = 651 ns (651 ns 주기로 sampling)
-    // 9600 Hz ( 651 ns * 16 = 10416 ns) * 9600 => 100_000_000 Hz
+    // 100_000_000 Hz / 153,600 = 651 ns (651 clk 주기로 sampling)
+    // 100_000_000 : 1 초당 clk tick 횟수
+    // 9600 : 1초당 9600 bit를 보냄.
+    // 1 bit를 읽는 데 필요한 clk Tick = 1 초 동안 보내는 clk tick [Hz] / 1초 동안 보내는 bit 수 [Hz] = 100_000_000 / 9600 [Hz]
+    // 1 bit를 16 번 over sampling 한다 = 1초당 읽어야하는 bit 수가 16배가 된다 => BPS가 16배가 되는 것과 같다.
+    // 1bit를 16번 over sampling 할 때 필요한 ckl tick 수 = 100_000_000 / (9600 * 16) = 약 651 개
+    // 651개 clk의 period = 10 ns * 651 = 6510 ns = 6.51 us
+    
     localparam DIV = 100_000_000 / (BPS * 16);  // 16 oversampling
 
     reg [1:0] rx_state;         // state: IDLE START DATA_BITS STOP_BIT
@@ -27,7 +33,8 @@ module uart_rx # (
     reg baud_tick;              // 651 ns 마다 tick 발생
     reg [3:0] baud_tick_cnt;    // 16개 오버샘플링 값 count
 
-    // 1. 651 ns tick을 생성하는 logic
+    // 1clk 10ns 651 clk => 6.51 us
+    // 1. 651 us tick을 생성하는 logic
     always @(posedge clk, posedge reset) begin
         if (reset) begin
             baud_cnt <= 0;
@@ -87,7 +94,7 @@ module uart_rx # (
                                 rx_state <= S_STOP_BIT;
                                 bit_cnt <= 4'd0;
                             end
-                            else bit_cnt <= bit_cnt + 1;        
+                            else bit_cnt <= bit_cnt + 1;
                         end
                     end
                 end
