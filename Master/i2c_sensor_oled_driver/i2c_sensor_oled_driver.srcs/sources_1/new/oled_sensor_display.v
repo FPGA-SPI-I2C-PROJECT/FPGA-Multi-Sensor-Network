@@ -34,7 +34,7 @@ module oled_sensor_display #(
     reg [7:0] data;
     wire [10:0] index;
     wire busy, done, nack, timeout_error;
-    
+
     i2c_write_master #(.CLK_HZ(CLK_HZ),.I2C_HZ(I2C_HZ),.TIMEOUT_MS(TIMEOUT_MS)) oled_bus (
         .clk(clk),.reset(reset),.start(start),.address(OLED_ADDR),
         .length(length),.byte_index(index),.byte_data(data),
@@ -186,7 +186,8 @@ module oled_sensor_display #(
 
     always @(posedge clk) begin
         if (reset) begin
-            state <= WAIT_POWER; packet <= 0; page <= 0; wait_count <= 0;
+            state <= WAIT_POWER;
+            packet <= 0; page <= 0; wait_count <= 0;
             start <= 0; pending <= 1;
             frame_valid <= 0; frame_temp <= 0; frame_humi <= 0; frame_dist <= 0;
             ready <= 0; error <= 0; nack_seen <= 0; timeout_seen <= 0;
@@ -200,7 +201,8 @@ module oled_sensor_display #(
                     page <= 0;
                     frame_valid <= valid_mask; frame_temp <= temperature;
                     frame_humi <= humidity; frame_dist <= distance;
-                    pending <= 0; state <= LAUNCH;
+                    pending <= 0;
+                    state <= LAUNCH;
                 end
                 LAUNCH: if (!busy) begin start <= 1; state <= WAIT_PACKET; end
                 WAIT_PACKET: if (done) begin
