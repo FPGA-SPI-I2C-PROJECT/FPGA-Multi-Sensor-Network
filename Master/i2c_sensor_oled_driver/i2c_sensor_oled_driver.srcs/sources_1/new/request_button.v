@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
-module request_button #(
-    parameter integer STABLE_CYCLES = 2_000_000
+module btn_debouncer #(
+    parameter integer DEBOUNCING_TIME = 1_000_000
 )(input wire clk, reset, button, output reg pressed);
     (* ASYNC_REG = "TRUE" *) reg [1:0] sync_button;
     reg stable;
@@ -11,7 +11,7 @@ module request_button #(
         end else begin
             sync_button <= {sync_button[0],button}; pressed <= 0;
             if (sync_button[1] == stable) count <= 0;
-            else if (count >= STABLE_CYCLES-1) begin
+            else if (count >= DEBOUNCING_TIME-1) begin
                 stable <= sync_button[1]; count <= 0;
                 if (sync_button[1]) pressed <= 1;
             end else count <= count+1;

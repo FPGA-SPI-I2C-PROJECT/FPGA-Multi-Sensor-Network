@@ -11,7 +11,7 @@ module sensor_network_master #(
     parameter [6:0] OLED_ADDR = 7'h3C,
     parameter POWERUP_MS = 100,
     parameter TIMEOUT_MS = 250,
-    parameter BUTTON_CYCLES = 2_000_000,
+    parameter BUTTON_CYCLES = 1_000_000,
     parameter SPI_PROTOCOL_READY = 1,
     parameter OLED_SELF_TEST = 0,
     parameter [7:0] CMD_TEMP = 8'h01,
@@ -62,7 +62,7 @@ module sensor_network_master #(
     assign selected_request_mask = uart_request ? uart_request_mask : sw_sync[4:2];
     assign selected_request_mode = uart_request ? uart_request_mode : sw_sync[1:0];
 
-    request_button #(.STABLE_CYCLES(BUTTON_CYCLES)) button (
+    btn_debouncer #(.DEBOUNCING_TIME(BUTTON_CYCLES)) u_btn_debouncer (
         .clk(clk),.reset(reset),.button(btnC),.pressed(button_request)
     );
 
