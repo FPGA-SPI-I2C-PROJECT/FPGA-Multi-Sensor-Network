@@ -21,6 +21,7 @@ module oled_sensor_display #(
     localparam [7:0] COM_CONFIG = OLED_HEIGHT == 64 ? 8'h12 : 8'h02;
     localparam [7:0] LAST_PAGE = OLED_HEIGHT/8-1;
     localparam WAIT_POWER=0, PREPARE=1, LAUNCH=2, WAIT_PACKET=3, IDLE=4, ERROR=5;
+
     reg [2:0] state;
     reg [1:0] packet;
     reg [2:0] page;
@@ -33,6 +34,7 @@ module oled_sensor_display #(
     reg [7:0] data;
     wire [10:0] index;
     wire busy, done, nack, timeout_error;
+    
     i2c_write_master #(.CLK_HZ(CLK_HZ),.I2C_HZ(I2C_HZ),.TIMEOUT_MS(TIMEOUT_MS)) oled_bus (
         .clk(clk),.reset(reset),.start(start),.address(OLED_ADDR),
         .length(length),.byte_index(index),.byte_data(data),
