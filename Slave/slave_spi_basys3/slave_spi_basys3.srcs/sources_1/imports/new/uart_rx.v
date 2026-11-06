@@ -10,15 +10,15 @@ module uart_rx #(
     output reg [7:0] data_out,
     output reg rx_done
 );
-    parameter S_IDLE = 2'b00;
-    parameter S_START_BIT = 2'b01;
-    parameter S_DATA_8BITS = 2'b10;
-    parameter S_STOP_BIT = 2'b11;
+    localparam S_IDLE = 2'b00;
+    localparam S_START_BIT = 2'b01;
+    localparam S_DATA_8BITS = 2'b10;
+    localparam S_STOP_BIT = 2'b11;
 
     //9600 * 16 = 153,600
     // 100_000_000 Hz / 153,600 = 651ns (651ns주기로 sampling)
     //9600Hz (651ns * 16 = 10416ns) 9600 ==> 100_000_000 Hz
-    parameter integer  DIVIDER_CNT = 100_000_000 / (BPS * 16);
+    localparam integer  DIVIDER_CNT = 100_000_000 / (BPS * 16);
 
     reg [1:0] r_rx_state; // state transition
     reg [3:0] r_bit_cnt; // r_data_reg에 저장할 index값

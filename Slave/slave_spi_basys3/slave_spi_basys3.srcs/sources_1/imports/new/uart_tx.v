@@ -11,11 +11,11 @@ module uart_tx #(parameter BPS = 9600)(
     output reg tx_busy
     );
 
-    parameter S_IDLE = 2'b00;
-    parameter S_START_BIT = 2'b01;
-    parameter S_DATA_8BITS = 2'b10;
-    parameter S_STOP_BIT = 2'b11;
-    parameter DIVIDER_CNT = 100_000_000 / BPS;
+    localparam S_IDLE = 2'b00;
+    localparam S_START_BIT = 2'b01;
+    localparam S_DATA_8BITS = 2'b10;
+    localparam S_STOP_BIT = 2'b11;
+    localparam DIVIDER_CNT = 100_000_000 / BPS;
 
     reg [1:0] r_tx_state; // state transition
     reg [3:0] r_bit_cnt; // 전송 bit count
