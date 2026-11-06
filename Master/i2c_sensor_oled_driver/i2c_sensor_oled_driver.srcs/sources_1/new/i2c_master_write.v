@@ -11,27 +11,30 @@ module i2c_write_master #(
     input reset,
     input start,
     input [6:0] address,
-    input [10:0] length,
-    input [7:0] byte_data,
-    output reg [10:0] byte_index,
-    output reg busy, output reg done,
+    input [10:0] length,                // 총 몇 Byte 데이터를 보낼거고
+    input [7:0] byte_data,              // 현재 보낼 데이터는 무엇인지
+    output reg [10:0] byte_index,       // 지금까지 몇 바이트를 보냈는지
+    output reg busy, output reg done,   //
     output reg nack, output reg timeout_error,
     inout wire sda, inout wire scl
 );
     localparam integer Q = CLK_HZ / (4 * I2C_HZ);   // 100 kHz의 1/4주기
     localparam integer LIMIT = (CLK_HZ / 1000) * TIMEOUT_MS;
+
     localparam [4:0] IDLE=0, BUS_FREE=1, START_HOLD=2, START_LOW=3,
         BIT_SET=4, BIT_RISE=5, BIT_HIGH=6, BIT_FALL=7,
         ACK_SET=8, ACK_RISE=9, ACK_HIGH=10, ACK_FALL=11,
         NEXT_BYTE=12, LOAD_BYTE=13, STOP_SET=14, STOP_RISE=15,
         STOP_HIGH=16, STOP_RELEASE=17, STOP_FREE=18;
+
     reg [4:0] state;
     reg [31:0] divider, watchdog;
     reg sda_low, scl_low;
     reg [7:0] shift;
     reg [2:0] bit_index;
     reg sending_address;
-    reg [10:0] count;                                       // 
+    reg [10:0] count;
+    
     (* ASYNC_REG = "TRUE" *) reg [1:0] sda_sync, scl_sync;  // 동기화 레지스터 [1]: prev_sync
     assign sda = sda_low ? 1'b0 : 1'bz;
     assign scl = scl_low ? 1'b0 : 1'bz;
@@ -42,7 +45,7 @@ module i2c_write_master #(
             sda_sync <= 2'b11;
             scl_sync <= 2'b11;
         end else begin
-            // 
+            // Signal Synchronization
             sda_sync <= {sda_sync[0], sda};
             scl_sync <= {scl_sync[0], scl};
         end

@@ -16,7 +16,7 @@ module oled_sensor_display #(
     inout wire oled_sda, oled_scl,
     output reg ready, error, nack_seen, timeout_seen
 );
-    localparam WAIT_CYCLES = POWERUP_MS == 0 ? 1 : (CLK_HZ/1000)*POWERUP_MS;
+    localparam WAIT_CYCLES = (POWERUP_MS == 0) ? 1 : (CLK_HZ/1000)*POWERUP_MS;
     localparam [7:0] MUX = OLED_HEIGHT-1;
     localparam [7:0] COM_CONFIG = OLED_HEIGHT == 64 ? 8'h12 : 8'h02;
     localparam [7:0] LAST_PAGE = OLED_HEIGHT/8-1;
@@ -126,7 +126,7 @@ module oled_sensor_display #(
     reg [2:0] pixel_row, glyph_column, font_column_q;
     reg [4:0] character_index;
     reg [7:0] character_q, frame_pixel_q;
-    
+
     always @(posedge clk) begin
         if (reset) begin
             pixel <= 0; pixel_row <= 0; glyph_column <= 0;
