@@ -16,7 +16,7 @@ module oled_sensor_display #(
     inout wire oled_sda, oled_scl,
     output reg ready, error, nack_seen, timeout_seen
 );
-    localparam integer WAIT_CYCLES = POWERUP_MS == 0 ? 1 : (CLK_HZ/1000)*POWERUP_MS;
+    localparam WAIT_CYCLES = POWERUP_MS == 0 ? 1 : (CLK_HZ/1000)*POWERUP_MS;
     localparam [7:0] MUX = OLED_HEIGHT-1;
     localparam [7:0] COM_CONFIG = OLED_HEIGHT == 64 ? 8'h12 : 8'h02;
     localparam [7:0] LAST_PAGE = OLED_HEIGHT/8-1;
@@ -115,7 +115,7 @@ module oled_sensor_display #(
     // combinational path. The unchanged I2C core advances byte_index in
     // NEXT_BYTE and samples byte_data in LOAD_BYTE one quarter-period later.
     // Therefore Q must be at least 5 clocks (default Q=250; test Q=12).
-    localparam integer PIXEL_PIPELINE_CYCLES = 4;
+    localparam PIXEL_PIPELINE_CYCLES = 4;
     // synthesis translate_off
     initial begin
         if (CLK_HZ/(4*I2C_HZ) <= PIXEL_PIPELINE_CYCLES)
@@ -126,6 +126,7 @@ module oled_sensor_display #(
     reg [2:0] pixel_row, glyph_column, font_column_q;
     reg [4:0] character_index;
     reg [7:0] character_q, frame_pixel_q;
+    
     always @(posedge clk) begin
         if (reset) begin
             pixel <= 0; pixel_row <= 0; glyph_column <= 0;

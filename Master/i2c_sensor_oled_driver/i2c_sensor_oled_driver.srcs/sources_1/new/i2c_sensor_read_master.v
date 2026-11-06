@@ -35,70 +35,40 @@ module i2c_sensor_read_master #(
     // <= 100 kHz : Standard-mode
     // <= 400 kHz : Fast-mode
     // <=   1 MHz : Fast-mode Plus
-    localparam integer HALF =
-        (CLK_HZ + 2*I2C_HZ - 1) / (2*I2C_HZ);
+    localparam HALF = (CLK_HZ + 2*I2C_HZ - 1) / (2*I2C_HZ);
 
     // 각 모드의 최소 시간. 단위: ns
-    localparam integer MIN_LOW_NS =
-        (I2C_HZ <= 100_000) ? 4700 :
-        (I2C_HZ <= 400_000) ? 1300 : 500;
-
-    localparam integer MIN_HIGH_NS =
-        (I2C_HZ <= 100_000) ? 4000 :
-        (I2C_HZ <= 400_000) ?  600 : 260;
-
-    localparam integer MIN_START_NS =
-        (I2C_HZ <= 100_000) ? 4000 :
-        (I2C_HZ <= 400_000) ?  600 : 260;
-
-    localparam integer MIN_RESTART_NS =
-        (I2C_HZ <= 100_000) ? 4700 :
-        (I2C_HZ <= 400_000) ?  600 : 260;
-
-    localparam integer MIN_STOP_NS =
-        (I2C_HZ <= 100_000) ? 4000 :
-        (I2C_HZ <= 400_000) ?  600 : 260;
-
-    localparam integer MIN_FREE_NS =
-        (I2C_HZ <= 100_000) ? 4700 :
-        (I2C_HZ <= 400_000) ? 1300 : 500;
+    localparam MIN_LOW_NS = (I2C_HZ <= 100_000) ? 4700 : (I2C_HZ <= 400_000) ? 1300 : 500;
+    localparam MIN_HIGH_NS = (I2C_HZ <= 100_000) ? 4000 : (I2C_HZ <= 400_000) ?  600 : 260;
+    localparam MIN_START_NS = (I2C_HZ <= 100_000) ? 4000 : (I2C_HZ <= 400_000) ?  600 : 260;
+    localparam MIN_RESTART_NS = (I2C_HZ <= 100_000) ? 4700 : (I2C_HZ <= 400_000) ?  600 : 260;
+    localparam MIN_STOP_NS = (I2C_HZ <= 100_000) ? 4000 : (I2C_HZ <= 400_000) ?  600 : 260;
+    localparam MIN_FREE_NS = (I2C_HZ <= 100_000) ? 4700 : (I2C_HZ <= 400_000) ? 1300 : 500;
 
     // 반주기와 해당 모드의 최소 시간 중 큰 값 사용
-    localparam integer LOW_CYCLES =
-        max_int(HALF, ns_cycles(MIN_LOW_NS));
-
-    localparam integer HIGH_CYCLES =
-        max_int(HALF, ns_cycles(MIN_HIGH_NS));
+    localparam LOW_CYCLES =  max_int(HALF, ns_cycles(MIN_LOW_NS));
+    localparam HIGH_CYCLES = max_int(HALF, ns_cycles(MIN_HIGH_NS));
 
     // SCL을 Low로 구동한 뒤 SDA를 변경하기까지의 기존 지연
-    localparam integer HOLD_CYCLES =
-        max_int(1, ns_cycles(100));
+    localparam HOLD_CYCLES = max_int(1, ns_cycles(100));
 
     // SDA 설정 후 SCL을 해제하기까지의 나머지 Low 시간
-    localparam integer SETUP_CYCLES =
-        LOW_CYCLES - HOLD_CYCLES;
+    localparam SETUP_CYCLES = LOW_CYCLES - HOLD_CYCLES;
+    localparam START_CYCLES = max_int(1, ns_cycles(MIN_START_NS));
+    localparam RESTART_CYCLES = max_int(1, ns_cycles(MIN_RESTART_NS));
+    localparam STOP_CYCLES = max_int(1, ns_cycles(MIN_STOP_NS));
+    localparam FREE_CYCLES = max_int(1, ns_cycles(MIN_FREE_NS));
+    localparam MAX_WAIT = max_int(max_int(LOW_CYCLES, HIGH_CYCLES), max_int(FREE_CYCLES, RESTART_CYCLES));
 
-    localparam integer START_CYCLES =
-        max_int(1, ns_cycles(MIN_START_NS));
-
-    localparam integer RESTART_CYCLES =
-        max_int(1, ns_cycles(MIN_RESTART_NS));
-
-    localparam integer STOP_CYCLES =
-        max_int(1, ns_cycles(MIN_STOP_NS));
-
-    localparam integer FREE_CYCLES =
-        max_int(1, ns_cycles(MIN_FREE_NS));
-    localparam MAX_WAIT = max_int(max_int(LOW_CYCLES, HIGH_CYCLES),
-                                            max_int(FREE_CYCLES, RESTART_CYCLES));
     // wait_cycles stores the count itself, including a power-of-two maximum.
     localparam TIMER_W = MAX_WAIT > 1 ? $clog2(MAX_WAIT + 1) : 1;
     localparam LIMIT = (64'd1 * CLK_HZ * TIMEOUT_MS + 999) / 1000;
     localparam WD_W = LIMIT > 1 ? $clog2(LIMIT) : 1;
 
-    localparam [3:0] IDLE=0, BUS_FREE=1, START=2,
-        TX_BYTE=3, RX_ACK=4, RESTART=5,
-        RX_BYTE=6, TX_ACK=7, STOP=8, RECOVER=9;
+    // i2c state
+    localparam [3:0]    IDLE=0, BUS_FREE=1, START=2, TX_BYTE=3, RX_ACK=4,
+                        RESTART=5, RX_BYTE=6, TX_ACK=7, STOP=8, RECOVER=9;
+
     reg [3:0] state;
     reg [2:0] phase;
     reg [TIMER_W-1:0] divider;
@@ -111,7 +81,9 @@ module i2c_sensor_read_master #(
     reg [1:0] tx_stage;
     reg [15:0] rx_shift;
     reg recovering, recovery_attempted;
+
     (* ASYNC_REG = "TRUE" *) reg [1:0] sda_sync, scl_sync;
+
     wire elapsed = divider == wait_cycles - 1'b1;
     assign sda = sda_low ? 1'b0 : 1'bz;
     assign scl = scl_low ? 1'b0 : 1'bz;
