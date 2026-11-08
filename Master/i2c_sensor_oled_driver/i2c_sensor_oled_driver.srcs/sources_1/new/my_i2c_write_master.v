@@ -125,8 +125,6 @@ module my_i2c_master #(
                         else if(scl_cnt >= (CLK_TICK_FOR_START_HOLDTIME_MIN * (100 + MARGIN_PERCENT))/100 -1) begin
                             scl_cnt <= 0;
                             scl_low <= 1'b1;
-                            if(I2C_PERIOD + 10 < DATA_SETUPTIME_MIN)
-                                sda_low <= !shift[bit_index];
                             state <= DATA_SETUP;
                         end
 
@@ -154,6 +152,7 @@ module my_i2c_master #(
                             scl_cnt <= 0;
                             scl_low <= 1'b1;
                         end
+                        
                         else begin
                             scl_cnt <= scl_cnt + 1;
                             if(scl_cnt >= I2C_HZ / 2 - 1) scl_low <= 1'b0;
