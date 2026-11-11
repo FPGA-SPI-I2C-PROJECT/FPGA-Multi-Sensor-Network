@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<export version="E">
+  <design>
+    <source>D:\Project\FPGA\FPGA-Multi-Sensor-Network\Master\i2c_sensor_oled_driver\diagram_top_wired\sensor_network_master.kicad_sch</source>
+    <date>2026-11-06T10:14:35</date>
+    <tool>Eeschema 10.0.3</tool>
+    <sheet number="1" name="/" tstamps="/">
+      <title_block>
+        <title>sensor_network_master - connected Top block diagram</title>
+        <company/>
+        <rev>2.0</rev>
+        <date>2026-11-06</date>
+        <source>sensor_network_master.kicad_sch</source>
+        <comment number="1" value="Single sheet; direct child modules; physical wire connections"/>
+        <comment number="2" value=""/>
+        <comment number="3" value=""/>
+        <comment number="4" value=""/>
+        <comment number="5" value=""/>
+        <comment number="6" value=""/>
+        <comment number="7" value=""/>
+        <comment number="8" value=""/>
+        <comment number="9" value=""/>
+      </title_block>
+    </sheet>
+  </design>
+  <components>
+    <comp ref="G1">
+      <value>Top_control</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="Top_control" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>0a8b3161-93e6-42e8-8b7e-0a1549784459</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="9"/>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="10"/>
+            <pin num="11"/>
+            <pin num="12"/>
+            <pin num="13"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="G2">
+      <value>Top_LED</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="Top_LED" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>ab4cbb86-51aa-49f1-a96d-16762a566ee2</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="8"/>
+            <pin num="3"/>
+            <pin num="2"/>
+            <pin num="1"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U1">
+      <value>request_button</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="request_button" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>f8e81d02-fb85-461d-bbdd-a9499adb113f</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="4"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U2">
+      <value>uart_controller_master</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="uart_controller_master" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>4f95c532-04a4-4bc9-be56-710170ade3ce</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="10"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="9"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U3">
+      <value>sensor_request_master</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="sensor_request_master" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>1f1aedbd-c273-4bd1-930c-66611a1643d0</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="3"/>
+            <pin num="4"/>
+            <pin num="5"/>
+            <pin num="6"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="14"/>
+            <pin num="1"/>
+            <pin num="15"/>
+            <pin num="2"/>
+            <pin num="16"/>
+            <pin num="17"/>
+            <pin num="18"/>
+            <pin num="9"/>
+            <pin num="10"/>
+            <pin num="11"/>
+            <pin num="12"/>
+            <pin num="13"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+    <comp ref="U4">
+      <value>oled_sensor_display</value>
+      <fields>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <libsource lib="TopDiagram" part="oled_sensor_display" description=""/>
+      <property name="Sheetname" value=""/>
+      <property name="Sheetfile" value="diagram_top_wired/sensor_network_master.kicad_sch"/>
+      <property name="exclude_from_bom"/>
+      <property name="exclude_from_board"/>
+      <sheetpath names="/" tstamps="/"/>
+      <tstamps>b83dd729-c6be-487c-9110-c3dd61b5f5be</tstamps>
+      <units>
+        <unit name="A">
+          <pins>
+            <pin num="1"/>
+            <pin num="2"/>
+            <pin num="3"/>
+            <pin num="10"/>
+            <pin num="4"/>
+            <pin num="11"/>
+            <pin num="5"/>
+            <pin num="12"/>
+            <pin num="6"/>
+            <pin num="13"/>
+            <pin num="7"/>
+            <pin num="8"/>
+            <pin num="9"/>
+          </pins>
+        </unit>
+      </units>
+    </comp>
+  </components>
+  <libparts>
+    <libpart lib="TopDiagram" part="Top_LED">
+      <fields>
+        <field name="Reference">G2</field>
+        <field name="Value">Top_LED</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="valid_mask[2:0]" type="input"/>
+        <pin num="2" name="error_code[2:0]" type="input"/>
+        <pin num="3" name="request_busy" type="input"/>
+        <pin num="4" name="ready" type="input"/>
+        <pin num="5" name="error" type="input"/>
+        <pin num="6" name="nack" type="input"/>
+        <pin num="7" name="timeout" type="input"/>
+        <pin num="8" name="led[15:0]" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="TopDiagram" part="Top_control">
+      <fields>
+        <field name="Reference">G1</field>
+        <field name="Value">Top_control</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="clk" type="input"/>
+        <pin num="2" name="reset" type="output"/>
+        <pin num="3" name="button_request" type="input"/>
+        <pin num="4" name="uart_request" type="input"/>
+        <pin num="5" name="uart_request_mask[2:0]" type="input"/>
+        <pin num="6" name="uart_request_mode[1:0]" type="input"/>
+        <pin num="7" name="mode_in[1:0]" type="output"/>
+        <pin num="8" name="sw[15:0]" type="input"/>
+        <pin num="9" name="uart_blocked" type="output"/>
+        <pin num="10" name="request" type="output"/>
+        <pin num="11" name="mode[1:0]" type="output"/>
+        <pin num="12" name="request_mask[2:0]" type="output"/>
+        <pin num="13" name="busy" type="input"/>
+      </pins>
+    </libpart>
+    <libpart lib="TopDiagram" part="oled_sensor_display">
+      <fields>
+        <field name="Reference">U4</field>
+        <field name="Value">oled_sensor_display</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="clk" type="input"/>
+        <pin num="2" name="reset" type="input"/>
+        <pin num="3" name="temperature[7:0]" type="input"/>
+        <pin num="4" name="humidity[7:0]" type="input"/>
+        <pin num="5" name="distance[8:0]" type="input"/>
+        <pin num="6" name="valid_mask[2:0]" type="input"/>
+        <pin num="7" name="update" type="input"/>
+        <pin num="8" name="oled_sda" type="bidirectional"/>
+        <pin num="9" name="oled_scl" type="bidirectional"/>
+        <pin num="10" name="ready" type="output"/>
+        <pin num="11" name="error" type="output"/>
+        <pin num="12" name="nack_seen" type="output"/>
+        <pin num="13" name="timeout_seen" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="TopDiagram" part="request_button">
+      <fields>
+        <field name="Reference">U1</field>
+        <field name="Value">request_button</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="clk" type="input"/>
+        <pin num="2" name="reset" type="input"/>
+        <pin num="3" name="button" type="input"/>
+        <pin num="4" name="pressed" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="TopDiagram" part="sensor_request_master">
+      <fields>
+        <field name="Reference">U3</field>
+        <field name="Value">sensor_request_master</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="clk" type="input"/>
+        <pin num="2" name="reset" type="input"/>
+        <pin num="3" name="request" type="input"/>
+        <pin num="4" name="mode[1:0]" type="input"/>
+        <pin num="5" name="request_mask[2:0]" type="input"/>
+        <pin num="6" name="spi_miso" type="input"/>
+        <pin num="7" name="error_code[2:0]" type="output"/>
+        <pin num="8" name="busy" type="output"/>
+        <pin num="9" name="spi_sclk" type="output"/>
+        <pin num="10" name="spi_mosi" type="output"/>
+        <pin num="11" name="spi_cs_n" type="output"/>
+        <pin num="12" name="board_sda" type="bidirectional"/>
+        <pin num="13" name="board_scl" type="bidirectional"/>
+        <pin num="14" name="temperature[7:0]" type="output"/>
+        <pin num="15" name="humidity[7:0]" type="output"/>
+        <pin num="16" name="distance[8:0]" type="output"/>
+        <pin num="17" name="valid_mask[2:0]" type="output"/>
+        <pin num="18" name="update" type="output"/>
+      </pins>
+    </libpart>
+    <libpart lib="TopDiagram" part="uart_controller_master">
+      <fields>
+        <field name="Reference">U2</field>
+        <field name="Value">uart_controller_master</field>
+        <field name="Footprint"/>
+        <field name="Datasheet"/>
+        <field name="Description"/>
+      </fields>
+      <pins>
+        <pin num="1" name="clk" type="input"/>
+        <pin num="2" name="reset" type="input"/>
+        <pin num="3" name="rx" type="input"/>
+        <pin num="4" name="request" type="output"/>
+        <pin num="5" name="request_mask[2:0]" type="output"/>
+        <pin num="6" name="request_mode[1:0]" type="output"/>
+        <pin num="7" name="mode_in[1:0]" type="input"/>
+        <pin num="8" name="tx" type="output"/>
+        <pin num="9" name="master_busy" type="input"/>
+        <pin num="10" name="reply_overflow" type="output"/>
+      </pins>
+    </libpart>
+  </libparts>
+  <libraries/>
+  <nets>
+    <net code="1" name="/RsRx" class="Default">
+      <node ref="U2" pin="3" pinfunction="rx_3" pintype="input"/>
+    </net>
+    <net code="2" name="/RsTx" class="Default">
+      <node ref="U2" pin="8" pinfunction="tx_8" pintype="output"/>
+    </net>
+    <net code="3" name="/board_scl" class="Default">
+      <node ref="U3" pin="13" pinfunction="board_scl_13" pintype="bidirectional"/>
+    </net>
+    <net code="4" name="/board_sda" class="Default">
+      <node ref="U3" pin="12" pinfunction="board_sda_12" pintype="bidirectional"/>
+    </net>
+    <net code="5" name="/btnC" class="Default">
+      <node ref="U1" pin="3" pinfunction="button_3" pintype="input"/>
+    </net>
+    <net code="6" name="/button_request" class="Default">
+      <node ref="G1" pin="3" pinfunction="button_request_3" pintype="input"/>
+      <node ref="U1" pin="4" pinfunction="pressed_4" pintype="output"/>
+    </net>
+    <net code="7" name="/clk" class="Default">
+      <node ref="G1" pin="1" pinfunction="clk_1" pintype="input"/>
+      <node ref="U1" pin="1" pinfunction="clk_1" pintype="input"/>
+      <node ref="U2" pin="1" pinfunction="clk_1" pintype="input"/>
+      <node ref="U3" pin="1" pinfunction="clk_1" pintype="input"/>
+      <node ref="U4" pin="1" pinfunction="clk_1" pintype="input"/>
+    </net>
+    <net code="8" name="/display_update" class="Default">
+      <node ref="U3" pin="18" pinfunction="update_18" pintype="output"/>
+      <node ref="U4" pin="7" pinfunction="update_7" pintype="input"/>
+    </net>
+    <net code="9" name="/distance[8:0]" class="Default">
+      <node ref="U3" pin="16" pinfunction="distance[8:0]_16" pintype="output"/>
+      <node ref="U4" pin="5" pinfunction="distance[8:0]_5" pintype="input"/>
+    </net>
+    <net code="10" name="/error_code[2:0]" class="Default">
+      <node ref="G2" pin="2" pinfunction="error_code[2:0]_2" pintype="input"/>
+      <node ref="U3" pin="7" pinfunction="error_code[2:0]_7" pintype="output"/>
+    </net>
+    <net code="11" name="/humidity[7:0]" class="Default">
+      <node ref="U3" pin="15" pinfunction="humidity[7:0]_15" pintype="output"/>
+      <node ref="U4" pin="4" pinfunction="humidity[7:0]_4" pintype="input"/>
+    </net>
+    <net code="12" name="/led[15:0]" class="Default">
+      <node ref="G2" pin="8" pinfunction="led[15:0]_8" pintype="output"/>
+    </net>
+    <net code="13" name="/oled_error" class="Default">
+      <node ref="G2" pin="5" pinfunction="error_5" pintype="input"/>
+      <node ref="U4" pin="11" pinfunction="error_11" pintype="output"/>
+    </net>
+    <net code="14" name="/oled_nack" class="Default">
+      <node ref="G2" pin="6" pinfunction="nack_6" pintype="input"/>
+      <node ref="U4" pin="12" pinfunction="nack_seen_12" pintype="output"/>
+    </net>
+    <net code="15" name="/oled_ready" class="Default">
+      <node ref="G2" pin="4" pinfunction="ready_4" pintype="input"/>
+      <node ref="U4" pin="10" pinfunction="ready_10" pintype="output"/>
+    </net>
+    <net code="16" name="/oled_scl" class="Default">
+      <node ref="U4" pin="9" pinfunction="oled_scl_9" pintype="bidirectional"/>
+    </net>
+    <net code="17" name="/oled_sda" class="Default">
+      <node ref="U4" pin="8" pinfunction="oled_sda_8" pintype="bidirectional"/>
+    </net>
+    <net code="18" name="/oled_timeout" class="Default">
+      <node ref="G2" pin="7" pinfunction="timeout_7" pintype="input"/>
+      <node ref="U4" pin="13" pinfunction="timeout_seen_13" pintype="output"/>
+    </net>
+    <net code="19" name="/request" class="Default">
+      <node ref="G1" pin="10" pinfunction="request_10" pintype="output"/>
+      <node ref="U3" pin="3" pinfunction="request_3" pintype="input"/>
+    </net>
+    <net code="20" name="/request_busy" class="Default">
+      <node ref="G1" pin="13" pinfunction="busy_13" pintype="input"/>
+      <node ref="G2" pin="3" pinfunction="request_busy_3" pintype="input"/>
+      <node ref="U3" pin="8" pinfunction="busy_8" pintype="output"/>
+    </net>
+    <net code="21" name="/reset" class="Default">
+      <node ref="G1" pin="2" pinfunction="reset_2" pintype="output"/>
+      <node ref="U1" pin="2" pinfunction="reset_2" pintype="input"/>
+      <node ref="U2" pin="2" pinfunction="reset_2" pintype="input"/>
+      <node ref="U3" pin="2" pinfunction="reset_2" pintype="input"/>
+      <node ref="U4" pin="2" pinfunction="reset_2" pintype="input"/>
+    </net>
+    <net code="22" name="/selected_request_mask[2:0]" class="Default">
+      <node ref="G1" pin="12" pinfunction="request_mask[2:0]_12" pintype="output"/>
+      <node ref="U3" pin="5" pinfunction="request_mask[2:0]_5" pintype="input"/>
+    </net>
+    <net code="23" name="/selected_request_mode[1:0]" class="Default">
+      <node ref="G1" pin="11" pinfunction="mode[1:0]_11" pintype="output"/>
+      <node ref="U3" pin="4" pinfunction="mode[1:0]_4" pintype="input"/>
+    </net>
+    <net code="24" name="/spi_cs_n" class="Default">
+      <node ref="U3" pin="11" pinfunction="spi_cs_n_11" pintype="output"/>
+    </net>
+    <net code="25" name="/spi_miso" class="Default">
+      <node ref="U3" pin="6" pinfunction="spi_miso_6" pintype="input"/>
+    </net>
+    <net code="26" name="/spi_mosi" class="Default">
+      <node ref="U3" pin="10" pinfunction="spi_mosi_10" pintype="output"/>
+    </net>
+    <net code="27" name="/spi_sclk" class="Default">
+      <node ref="U3" pin="9" pinfunction="spi_sclk_9" pintype="output"/>
+    </net>
+    <net code="28" name="/sw[15:0]" class="Default">
+      <node ref="G1" pin="8" pinfunction="sw[15:0]_8" pintype="input"/>
+    </net>
+    <net code="29" name="/sw_sync[1:0]" class="Default">
+      <node ref="G1" pin="7" pinfunction="mode_in[1:0]_7" pintype="output"/>
+      <node ref="U2" pin="7" pinfunction="mode_in[1:0]_7" pintype="input"/>
+    </net>
+    <net code="30" name="/temperature[7:0]" class="Default">
+      <node ref="U3" pin="14" pinfunction="temperature[7:0]_14" pintype="output"/>
+      <node ref="U4" pin="3" pinfunction="temperature[7:0]_3" pintype="input"/>
+    </net>
+    <net code="31" name="/uart_blocked" class="Default">
+      <node ref="G1" pin="9" pinfunction="uart_blocked_9" pintype="output"/>
+      <node ref="U2" pin="9" pinfunction="master_busy_9" pintype="input"/>
+    </net>
+    <net code="32" name="/uart_reply_overflow" class="Default">
+      <node ref="U2" pin="10" pinfunction="reply_overflow_10" pintype="output+no_connect"/>
+    </net>
+    <net code="33" name="/uart_request" class="Default">
+      <node ref="G1" pin="4" pinfunction="uart_request_4" pintype="input"/>
+      <node ref="U2" pin="4" pinfunction="request_4" pintype="output"/>
+    </net>
+    <net code="34" name="/uart_request_mask[2:0]" class="Default">
+      <node ref="G1" pin="5" pinfunction="uart_request_mask[2:0]_5" pintype="input"/>
+      <node ref="U2" pin="5" pinfunction="request_mask[2:0]_5" pintype="output"/>
+    </net>
+    <net code="35" name="/uart_request_mode[1:0]" class="Default">
+      <node ref="G1" pin="6" pinfunction="uart_request_mode[1:0]_6" pintype="input"/>
+      <node ref="U2" pin="6" pinfunction="request_mode[1:0]_6" pintype="output"/>
+    </net>
+    <net code="36" name="/valid_mask[2:0]" class="Default">
+      <node ref="G2" pin="1" pinfunction="valid_mask[2:0]_1" pintype="input"/>
+      <node ref="U3" pin="17" pinfunction="valid_mask[2:0]_17" pintype="output"/>
+      <node ref="U4" pin="6" pinfunction="valid_mask[2:0]_6" pintype="input"/>
+    </net>
+  </nets>
+</export>

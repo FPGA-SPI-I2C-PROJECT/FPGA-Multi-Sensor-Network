@@ -1,0 +1,724 @@
+{
+  "direct_modules": 4,
+  "sheets": 1,
+  "nets": 36,
+  "wire_segments": 94,
+  "all_terminals_physically_connected": true,
+  "unintended_shorts": 0,
+  "net_connections": {
+    "clk": [
+      {
+        "terminal": "request_button.clk",
+        "xy": [
+          100,
+          95
+        ]
+      },
+      {
+        "terminal": "uart_controller_master.clk",
+        "xy": [
+          100,
+          160
+        ]
+      },
+      {
+        "terminal": "Top_control.clk",
+        "xy": [
+          285,
+          85
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.clk",
+        "xy": [
+          420,
+          85
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.clk",
+        "xy": [
+          395,
+          340
+        ]
+      },
+      {
+        "terminal": "top.clk",
+        "xy": [
+          27,
+          45
+        ]
+      }
+    ],
+    "reset": [
+      {
+        "terminal": "request_button.reset",
+        "xy": [
+          100,
+          102
+        ]
+      },
+      {
+        "terminal": "uart_controller_master.reset",
+        "xy": [
+          100,
+          173
+        ]
+      },
+      {
+        "terminal": "Top_control.reset",
+        "xy": [
+          320,
+          85
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.reset",
+        "xy": [
+          437,
+          85
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.reset",
+        "xy": [
+          395,
+          352
+        ]
+      }
+    ],
+    "btnC": [
+      {
+        "terminal": "request_button.button",
+        "xy": [
+          100,
+          115
+        ]
+      },
+      {
+        "terminal": "top.btnC",
+        "xy": [
+          27,
+          115
+        ]
+      }
+    ],
+    "button_request": [
+      {
+        "terminal": "request_button.pressed",
+        "xy": [
+          185,
+          110
+        ]
+      },
+      {
+        "terminal": "Top_control.button_request",
+        "xy": [
+          260,
+          110
+        ]
+      }
+    ],
+    "RsRx": [
+      {
+        "terminal": "uart_controller_master.rx",
+        "xy": [
+          100,
+          190
+        ]
+      },
+      {
+        "terminal": "top.RsRx",
+        "xy": [
+          27,
+          190
+        ]
+      },
+      {
+        "terminal": "top.rx_debug",
+        "xy": [
+          555,
+          395
+        ]
+      }
+    ],
+    "uart_request": [
+      {
+        "terminal": "uart_controller_master.request",
+        "xy": [
+          205,
+          160
+        ]
+      },
+      {
+        "terminal": "Top_control.uart_request",
+        "xy": [
+          260,
+          160
+        ]
+      }
+    ],
+    "uart_request_mask[2:0]": [
+      {
+        "terminal": "uart_controller_master.request_mask[2:0]",
+        "xy": [
+          205,
+          175
+        ]
+      },
+      {
+        "terminal": "Top_control.uart_request_mask[2:0]",
+        "xy": [
+          260,
+          175
+        ]
+      }
+    ],
+    "uart_request_mode[1:0]": [
+      {
+        "terminal": "uart_controller_master.request_mode[1:0]",
+        "xy": [
+          205,
+          190
+        ]
+      },
+      {
+        "terminal": "Top_control.uart_request_mode[1:0]",
+        "xy": [
+          260,
+          190
+        ]
+      }
+    ],
+    "sw_sync[1:0]": [
+      {
+        "terminal": "uart_controller_master.mode_in[1:0]",
+        "xy": [
+          205,
+          205
+        ]
+      },
+      {
+        "terminal": "Top_control.mode_in[1:0]",
+        "xy": [
+          260,
+          205
+        ]
+      }
+    ],
+    "RsTx": [
+      {
+        "terminal": "uart_controller_master.tx",
+        "xy": [
+          205,
+          220
+        ]
+      },
+      {
+        "terminal": "top.RsTx",
+        "xy": [
+          555,
+          205
+        ]
+      },
+      {
+        "terminal": "top.tx_debug",
+        "xy": [
+          555,
+          220
+        ]
+      }
+    ],
+    "uart_blocked": [
+      {
+        "terminal": "uart_controller_master.master_busy",
+        "xy": [
+          205,
+          235
+        ]
+      },
+      {
+        "terminal": "Top_control.uart_blocked",
+        "xy": [
+          260,
+          235
+        ]
+      }
+    ],
+    "uart_reply_overflow": [
+      {
+        "terminal": "uart_controller_master.reply_overflow",
+        "xy": [
+          160,
+          248
+        ]
+      }
+    ],
+    "sw[15:0]": [
+      {
+        "terminal": "Top_control.sw[15:0]",
+        "xy": [
+          260,
+          220
+        ]
+      },
+      {
+        "terminal": "top.sw",
+        "xy": [
+          27,
+          280
+        ]
+      }
+    ],
+    "request": [
+      {
+        "terminal": "Top_control.request",
+        "xy": [
+          345,
+          110
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.request",
+        "xy": [
+          405,
+          110
+        ]
+      }
+    ],
+    "selected_request_mode[1:0]": [
+      {
+        "terminal": "Top_control.mode[1:0]",
+        "xy": [
+          345,
+          125
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.mode[1:0]",
+        "xy": [
+          405,
+          125
+        ]
+      }
+    ],
+    "selected_request_mask[2:0]": [
+      {
+        "terminal": "Top_control.request_mask[2:0]",
+        "xy": [
+          345,
+          140
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.request_mask[2:0]",
+        "xy": [
+          405,
+          140
+        ]
+      }
+    ],
+    "request_busy": [
+      {
+        "terminal": "Top_control.busy",
+        "xy": [
+          345,
+          235
+        ]
+      },
+      {
+        "terminal": "sensor_request_master.busy",
+        "xy": [
+          405,
+          235
+        ]
+      },
+      {
+        "terminal": "Top_LED.request_busy",
+        "xy": [
+          300,
+          315
+        ]
+      }
+    ],
+    "spi_miso": [
+      {
+        "terminal": "sensor_request_master.spi_miso",
+        "xy": [
+          405,
+          155
+        ]
+      },
+      {
+        "terminal": "top.spi_miso",
+        "xy": [
+          27,
+          265
+        ]
+      }
+    ],
+    "error_code[2:0]": [
+      {
+        "terminal": "sensor_request_master.error_code[2:0]",
+        "xy": [
+          405,
+          200
+        ]
+      },
+      {
+        "terminal": "Top_LED.error_code[2:0]",
+        "xy": [
+          320,
+          315
+        ]
+      }
+    ],
+    "spi_sclk": [
+      {
+        "terminal": "sensor_request_master.spi_sclk",
+        "xy": [
+          505,
+          105
+        ]
+      },
+      {
+        "terminal": "top.spi_sclk",
+        "xy": [
+          555,
+          105
+        ]
+      }
+    ],
+    "spi_mosi": [
+      {
+        "terminal": "sensor_request_master.spi_mosi",
+        "xy": [
+          505,
+          120
+        ]
+      },
+      {
+        "terminal": "top.spi_mosi",
+        "xy": [
+          555,
+          120
+        ]
+      }
+    ],
+    "spi_cs_n": [
+      {
+        "terminal": "sensor_request_master.spi_cs_n",
+        "xy": [
+          505,
+          135
+        ]
+      },
+      {
+        "terminal": "top.spi_cs_n",
+        "xy": [
+          555,
+          135
+        ]
+      }
+    ],
+    "board_sda": [
+      {
+        "terminal": "sensor_request_master.board_sda",
+        "xy": [
+          505,
+          150
+        ]
+      },
+      {
+        "terminal": "top.board_sda",
+        "xy": [
+          555,
+          150
+        ]
+      }
+    ],
+    "board_scl": [
+      {
+        "terminal": "sensor_request_master.board_scl",
+        "xy": [
+          505,
+          165
+        ]
+      },
+      {
+        "terminal": "top.board_scl",
+        "xy": [
+          555,
+          165
+        ]
+      }
+    ],
+    "temperature[7:0]": [
+      {
+        "terminal": "sensor_request_master.temperature[7:0]",
+        "xy": [
+          415,
+          248
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.temperature[7:0]",
+        "xy": [
+          415,
+          310
+        ]
+      }
+    ],
+    "humidity[7:0]": [
+      {
+        "terminal": "sensor_request_master.humidity[7:0]",
+        "xy": [
+          435,
+          248
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.humidity[7:0]",
+        "xy": [
+          435,
+          310
+        ]
+      }
+    ],
+    "distance[8:0]": [
+      {
+        "terminal": "sensor_request_master.distance[8:0]",
+        "xy": [
+          455,
+          248
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.distance[8:0]",
+        "xy": [
+          455,
+          310
+        ]
+      }
+    ],
+    "valid_mask[2:0]": [
+      {
+        "terminal": "sensor_request_master.valid_mask[2:0]",
+        "xy": [
+          475,
+          248
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.valid_mask[2:0]",
+        "xy": [
+          475,
+          310
+        ]
+      },
+      {
+        "terminal": "Top_LED.valid_mask[2:0]",
+        "xy": [
+          340,
+          315
+        ]
+      }
+    ],
+    "display_update": [
+      {
+        "terminal": "sensor_request_master.update",
+        "xy": [
+          495,
+          248
+        ]
+      },
+      {
+        "terminal": "oled_sensor_display.update",
+        "xy": [
+          495,
+          310
+        ]
+      }
+    ],
+    "oled_sda": [
+      {
+        "terminal": "oled_sensor_display.oled_sda",
+        "xy": [
+          505,
+          335
+        ]
+      },
+      {
+        "terminal": "top.oled_sda",
+        "xy": [
+          555,
+          335
+        ]
+      }
+    ],
+    "oled_scl": [
+      {
+        "terminal": "oled_sensor_display.oled_scl",
+        "xy": [
+          505,
+          350
+        ]
+      },
+      {
+        "terminal": "top.oled_scl",
+        "xy": [
+          555,
+          350
+        ]
+      }
+    ],
+    "oled_ready": [
+      {
+        "terminal": "oled_sensor_display.ready",
+        "xy": [
+          415,
+          370
+        ]
+      },
+      {
+        "terminal": "Top_LED.ready",
+        "xy": [
+          345,
+          325
+        ]
+      }
+    ],
+    "oled_error": [
+      {
+        "terminal": "oled_sensor_display.error",
+        "xy": [
+          435,
+          370
+        ]
+      },
+      {
+        "terminal": "Top_LED.error",
+        "xy": [
+          345,
+          337
+        ]
+      }
+    ],
+    "oled_nack": [
+      {
+        "terminal": "oled_sensor_display.nack_seen",
+        "xy": [
+          455,
+          370
+        ]
+      },
+      {
+        "terminal": "Top_LED.nack",
+        "xy": [
+          345,
+          349
+        ]
+      }
+    ],
+    "oled_timeout": [
+      {
+        "terminal": "oled_sensor_display.timeout_seen",
+        "xy": [
+          475,
+          370
+        ]
+      },
+      {
+        "terminal": "Top_LED.timeout",
+        "xy": [
+          345,
+          361
+        ]
+      }
+    ],
+    "led[15:0]": [
+      {
+        "terminal": "Top_LED.led[15:0]",
+        "xy": [
+          260,
+          355
+        ]
+      },
+      {
+        "terminal": "top.led",
+        "xy": [
+          555,
+          405
+        ]
+      }
+    ]
+  },
+  "pin_nets": {
+    "U1.1": "clk",
+    "U1.2": "reset",
+    "U1.3": "btnC",
+    "U1.4": "button_request",
+    "U2.1": "clk",
+    "U2.2": "reset",
+    "U2.3": "RsRx",
+    "U2.4": "uart_request",
+    "U2.5": "uart_request_mask[2:0]",
+    "U2.6": "uart_request_mode[1:0]",
+    "U2.7": "sw_sync[1:0]",
+    "U2.8": "RsTx",
+    "U2.9": "uart_blocked",
+    "U2.10": "uart_reply_overflow",
+    "G1.1": "clk",
+    "G1.2": "reset",
+    "G1.3": "button_request",
+    "G1.4": "uart_request",
+    "G1.5": "uart_request_mask[2:0]",
+    "G1.6": "uart_request_mode[1:0]",
+    "G1.7": "sw_sync[1:0]",
+    "G1.8": "sw[15:0]",
+    "G1.9": "uart_blocked",
+    "G1.10": "request",
+    "G1.11": "selected_request_mode[1:0]",
+    "G1.12": "selected_request_mask[2:0]",
+    "G1.13": "request_busy",
+    "U3.1": "clk",
+    "U3.2": "reset",
+    "U3.3": "request",
+    "U3.4": "selected_request_mode[1:0]",
+    "U3.5": "selected_request_mask[2:0]",
+    "U3.6": "spi_miso",
+    "U3.7": "error_code[2:0]",
+    "U3.8": "request_busy",
+    "U3.9": "spi_sclk",
+    "U3.10": "spi_mosi",
+    "U3.11": "spi_cs_n",
+    "U3.12": "board_sda",
+    "U3.13": "board_scl",
+    "U3.14": "temperature[7:0]",
+    "U3.15": "humidity[7:0]",
+    "U3.16": "distance[8:0]",
+    "U3.17": "valid_mask[2:0]",
+    "U3.18": "display_update",
+    "U4.1": "clk",
+    "U4.2": "reset",
+    "U4.3": "temperature[7:0]",
+    "U4.4": "humidity[7:0]",
+    "U4.5": "distance[8:0]",
+    "U4.6": "valid_mask[2:0]",
+    "U4.7": "display_update",
+    "U4.8": "oled_sda",
+    "U4.9": "oled_scl",
+    "U4.10": "oled_ready",
+    "U4.11": "oled_error",
+    "U4.12": "oled_nack",
+    "U4.13": "oled_timeout",
+    "G2.1": "valid_mask[2:0]",
+    "G2.2": "error_code[2:0]",
+    "G2.3": "request_busy",
+    "G2.4": "oled_ready",
+    "G2.5": "oled_error",
+    "G2.6": "oled_nack",
+    "G2.7": "oled_timeout",
+    "G2.8": "led[15:0]"
+  }
+}
