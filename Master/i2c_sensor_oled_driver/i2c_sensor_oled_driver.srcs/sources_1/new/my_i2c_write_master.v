@@ -51,6 +51,8 @@ module my_i2c_master #(
     // state 관련 parameter
     localparam [2:0]    IDLE = 0, START_CONDITION = 1, DATA_SETUP = 2,
                         DATA_HOLD = 3, ACK_NACK = 4, STOP_CONDITION = 5;
+    
+    localparam [1:0]    NORMAL = 0, SETUP_LONGER_THAN_I2CHALF = 1, HOLD_LONGER_THAN_I2CHALF = 2, TIMING_VIOLATION = 3;
 
     reg [2:0] state, prev_state;  // IDLE -> START_CONDITION ->
     reg [$clog2(BYTE_MAX)-1:0] tx_cnt;
@@ -63,7 +65,10 @@ module my_i2c_master #(
     reg setup_satisfied, hold_satisfied;
 
     // data setup/hold time의 합이 I2C 주기보다 크면 무조건 timing violoatin 발생
-    assign timing_violation = (I2C_PERIOD < DATA_SETUPTIME_MIN + DATA_HOLDTIME_MIN) ? 1 : 0;
+    wire [1:0] timing_state;
+    assign timing_state =   ((DATA_SETUPTIME_MIN + DATA_HOLDTIME_MIN)* (100 + MARGIN_PERCENT)/100 >= I2C_PERIOD) ? TIMING_VIOLATION :
+                            (I2C_PERIOD/2 < DATA_HOLDTIME_MIN* (100 + MARGIN_PERCENT)/100) ? HOLD_LONGER_THAN_I2CHALF :
+                            (I2C_PERIOD/2 < DATA_SETUPTIME_MIN* (100 + MARGIN_PERCENT)/100) ? SETUP_LONGER_THAN_I2CHALF : NORMAL;
 
     (* ASYNC_REG = "TRUE" *) reg [1:0] scl_sync, sda_sync;
     reg scl_low, sda_low;
@@ -95,7 +100,7 @@ module my_i2c_master #(
 
         else begin
             if(!busy) begin
-                time_cnt <= 0; scl_cnt <= 0; watchdog <= 0;
+                time_cnt <= 0;  watchdog <= 0;
                 if(start) begin
                     busy <= 1; done <= 1'b0; nack <= 1'b0; timeout_error <= 1'b0;
                     byte_index <= 0; tx_cnt <= length;
@@ -118,21 +123,43 @@ module my_i2c_master #(
                     START_CONDITION: begin
                         if(prev_state == IDLE) begin
                             time_cnt <= 0;
-                            scl_cnt <= 0;
                             sda_low <= 1'b1;
                         end
 
-                        else if(scl_cnt >= (CLK_TICK_FOR_START_HOLDTIME_MIN * (100 + MARGIN_PERCENT))/100 -1) begin
-                            scl_cnt <= 0;
+                        else if(time_cnt >= (CLK_TICK_FOR_START_HOLDTIME_MIN * (100 + MARGIN_PERCENT))/100 -1) begin
+                            time_cnt <= 0;
                             scl_low <= 1'b1;
                             state <= DATA_SETUP;
                         end
 
-                        else scl_cnt <= scl_cnt + 1;
+                        else time_cnt <= time_cnt + 1;
                     end
+
                     DATA_SETUP: begin
-                        if(I2C_PERIOD < DATA_SETUPTIME_MIN)
-                            sda_low <= !shift[bit_index];
+                        if(timing_state == SETUP_LONGER_THAN_I2CHALF) begin
+                            if(prev_state == START_CONDITION) begin
+                                sda_low <= !shift[bit_index];
+                                time_cnt <= 0;
+                            end
+                            else if (time_cnt >= (DATA_SETUPTIME_MIN * (100 + MARGIN_PERCENT))/100 -1) begin
+                                time_cnt <= 0;
+                                scl_low <= 1'b0;
+                            end
+                        end
+
+                        else begin
+                            if(prev_state == START_CONDITION) begin
+                                sda_low <= !shift[bit_index];
+                                time_cnt <= 0;
+                            end
+                            else if (time_cnt >= I2C_PERIOD/2 - (DATA_SETUPTIME_MIN * (100 + MARGIN_PERCENT))/100 -1) begin
+                                time_cnt <= 0;
+                                scl_low <= 1'b0;
+                                state <= state
+                            end
+
+                            else time_cnt <= time_cnt + 1;
+                        end
                         
                         if(time_cnt >= I2C_HZ/2 -1) begin
                             time_cnt <= 0;
